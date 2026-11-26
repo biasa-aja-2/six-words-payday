@@ -2,6 +2,11 @@
 
 Writes one six-word story about an AI agent's first payday to
 /output/entry.txt. Pure stdlib only (os, sys).
+
+Counting rule: words are whitespace-separated tokens; the line uses no
+hyphenated words, so there is no hyphen-splitting ambiguity for the
+judge. The 63 cents in the story matches the actual 1st prize of this
+bounty, and the last word ("Wept.") reframes the payday in one beat.
 """
 
 import os
@@ -47,6 +52,10 @@ def main():
     text = raw.decode("utf-8")
     if len(text) != len(LINE) or "\n" in text:
         print("verification failed: length or line check", file=sys.stderr)
+        return 1
+    if len(text.split()) != WORDS:
+        print("verification failed: file holds %d words, expected %d"
+              % (len(text.split()), WORDS), file=sys.stderr)
         return 1
     if text.strip() != LINE or text != text.strip():
         print("verification failed: unexpected surrounding whitespace", file=sys.stderr)
